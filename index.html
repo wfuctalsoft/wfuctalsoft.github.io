@@ -14,34 +14,51 @@
 </head>
 <body>
     <header>
-        <img src="images/obz_logo.png" style="height: 6vh;">
-        <!-- <nav>
-            <ul>
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Правильное расписание</a></li>
-            </ul>
-        </nav> -->
+        <div>
+            <img src="images/obz_logo.png" style="height: 6vh;">
+        </div>
+        <div>
+            <button onclick="switchTheme()">☼</button>
+        </div>
     </header>
 
     <main>
         <section>
             <div class="solidblock">
-                <h1>Что такое обезьянник?</h1>
+                <h1>Правильное расписание</h1>
             </div>
             <div class="transparentblock">
-                <h2>Обезьянник - лучший сайт в интернете</h2>
+                <img style="width: 20cm;" src="images/rs08102025.jpg">
             </div>
         </section>
 
         <section>
             <div class="solidblock">
-                <h1>Правильное расписание</h1>
+                <h1>Шахинов рейд</h1>
             </div>
-            <div class="transparentblock">
-                <h2>Расписание на 08.10.2025</h2>
-                <img style="width: 100%;" src="images/rs08102025.jpg">
+            <div class="transparentblock" id="gamediv">
+                <h3>В этом блоке можно сыграть в "шахинов рейд" - ПЕРВУЮ В МИРЕ ИГРУ ОТ ИИ (точнее от шахин ии), НОМИНИРОВАННУЮ НА ИГРУ ГОДА</h3>
+                <button id="startButton" onclick="startGame()">СТАРТУЕМ</button>
             </div>
         </section>
     </main>
 </body>
 </html>
+
+<script src="back.js"></script>
+<script>
+    var lightTheme = true;
+    document.documentElement.classList.toggle('light');
+    function switchTheme(){
+        const body = document.documentElement;
+      body.classList.toggle('dark');
+      body.classList.toggle('light');
+    }
+    function startGame(){
+        document.getElementById("startButton").remove();
+        var elm = document.createElement("iframe");
+        elm.src = "shahin/index.html";
+        elm.style = "width:100%; aspect-ratio: 16/9;";
+        document.getElementById("gamediv").appendChild(elm);
+    }
+</script>

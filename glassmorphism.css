@@ -1,13 +1,21 @@
+:root {
+  --dark-bg: linear-gradient(135deg, #292929 0%, #141414 100%);
+  --light-bg: linear-gradient(135deg, #e6f0ff 0%, #c9d6ff 100%); 
+  --dark-text: #e4e4e4; 
+  --light-text: #242424;
+}
+
 header{
-  backdrop-filter: blur(10mm);
+  backdrop-filter: blur(20mm);
   border: none;
   margin: 0;
-  padding: 1vh 1vw;
-  background: rgba(255, 255, 255, 0.25);
+  padding: 1vh 2vh;
+  background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 2mm #00000030;
   top:0;
   display:flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 ul{
@@ -24,7 +32,7 @@ a{
 section {
   backdrop-filter: blur(2mm);
   border: 0.5mm solid rgba(255, 255, 255, 0.3);
-  margin: 2vh 2vw;
+  margin: 1vh 1vh;
   /* padding: 1vh 1vw; */
   padding: 0;
   border-radius: 5mm;
@@ -34,41 +42,64 @@ section {
   overflow: hidden;
 }
 
-.solidblock{
+html.light div.solidblock{
     margin: 0;
-    padding: 1vh 1vw;
+    padding: 1vh 1vh;
     display:flexbox;
-    background-color: aliceblue;
+    background:  var(--light-bg);
 }
-.transparentblock{
+html.dark div.solidblock{
     margin: 0;
-    padding: 1vh 1vw;
+    padding: 1vh 1vh;
+    display:flexbox;
+    background:  var(--dark-bg);
+}
+div.transparentblock{
+    margin: 0;
+    padding: 1vh 1vh;
     display:flexbox;
     background-color: transparent;
 }
 
-button{
-  background: linear-gradient(135deg,#f7f7f7,#f5faff);
+html.light button{
+  background:  var(--light-bg);
   border-radius: 5mm;
   border: 0.5mm solid rgba(255, 255, 255, 0.3); 
-  padding: 1vh 1vw;
+  padding: 1vh 1.5vh;
+}
+html.dark button{
+  background:  var(--dark-bg);
+  border-radius: 5mm;
+  border: 0.5mm solid rgba(255, 255, 255, 0.3); 
+  padding: 1vh 1.5vh;
 }
 
 img{
   border-radius: 5mm;
+  max-width: 100%;
 }
 
 body{
-    height: 100%;
     padding: 0;
     margin: 0;
-    background:  linear-gradient(135deg, #e6f0ff 0%, #c9d6ff 100%);
+}
+
+html.light body{
+    background:  var(--light-bg);
+}
+html.dark body{
+    background:  var(--dark-bg);
+}
+
+html.light *{
+  color: var(--light-text);
+}
+html.dark *{
+  color: var(--dark-text);
 }
 
 * {
     font-size:1.05em;
-    -webkit-text-stroke-width: 0.05vw;
-    -webkit-text-stroke-color: rgb(26, 26, 26);
     font-family: "Mulish", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
