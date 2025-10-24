@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обезьянник ру - сайт южного и северного обезъянника</title>
+    <meta name="description" content="Обезьянник ру - сайт про северный и южный обезьянник. спонсором является просветленный осел, иконой - басков олег юрьевич">
+    <meta name="keywords" content="обезьянник, южный обезьянник, северный обезьянник, шахин, осел">
+    <meta property="og:title" content="Обезьянник - правильное расписание и шахинов рейд"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://obezyanik.ru" />
+    <meta property="og:image" content="http://obezyanik.ru/images/wpp.png"/>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Обезьянник" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="stylesheet" href="/glassmorphism.css">
+</head>
+<body>
+    <header>
+        <div id="headerMain">
+            <img src="/images/obz_logo.png" style="height: 6vh;">
+            <a href="/">Главная</a>
+            <a href="/rs">Правильное расписание</a>
+            <a href="/shahin">Шахинов рейд</a>
+        </div>
+        <div>
+            <button style="aspect-ratio: 1/1;" onclick="switchTheme()">☼</button>
+            <button style="aspect-ratio: 1/1;"><a href="https://t.me/mehatac">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"/>
+                </svg>
+            </a></button>
+        </div>
+    </header>
+
+    <main>
+
+        <section>
+            <div class="solidblock">
+                <h1>Правильное расписание</h1>
+            </div>
+            <div class="transparentblock" style="padding: 0;overflow: hidden;" id="rightschedule">
+            </div>
+        </section>
+    </main>
+</body>
+
+<div id="menuimg" onclick="hideImage()" style="opacity: 0; pointer-events: none;">
+    <img id="menuimgimg" src="/images/rightschedule/rs24102025.jpg">
+</div>
+</html>
+
+<script src="/back.js"></script>
+<script>
+    var lightTheme = true;
+    document.documentElement.classList.toggle('light');
+    switchTheme();
+
+    function switchTheme(){
+        const body = document.documentElement;
+      body.classList.toggle('dark');
+      body.classList.toggle('light');
+    }
+</script>
+
+<style>
+    .yearblock{
+        max-width: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .monthblock{
+        max-width: 100%;
+        margin: 0;
+        display: flex;
+    }
+    .newestblock{
+        display: flex;
+        justify-content: center; 
+        align-items: center;  
+        height: 30vh;
+    }
+    .newestblock > img{
+        height: 100%;
+    }
+    #menuimg{
+        position: fixed;
+        background: #000A;
+        width:100vw;
+        height:100vh;
+        top:0;
+        left:0;
+        padding:3vh 3vw;
+        transition: opacity,0.5s;
+    }
+    #menuimg > img{
+        position: fixed;
+        top:50%;
+        left:50%;
+        transform: translateX(-50%) translateY(-50%);
+        width:100%;
+        max-width:90vw;
+        max-height: 98vh;
+        object-fit:contain;
+    }
+</style>
+
+<script>
+    var dates = [
+        {day:8,month:10,year:2025},
+        {day:9,month:10,year:2025},
+        {day:10,month:10,year:2025},
+        {day:11,month:10,year:2025},
+        {day:13,month:10,year:2025},
+        {day:14,month:10,year:2025},
+        {day:15,month:10,year:2025},
+        {day:16,month:10,year:2025},
+        {day:17,month:10,year:2025},
+        {day:18,month:10,year:2025},
+        {day:20,month:10,year:2025},
+        {day:21,month:10,year:2025},
+        {day:22,month:10,year:2025},
+        {day:23,month:10,year:2025},
+        {day:24,month:10,year:2025},
+    ];
+    var newestbackcolor = "#FFF";
+    var monthnames = [
+        "",
+        "Январь",
+        "Февраль",
+        "Март",
+        "Апрель",
+        "Май",
+        "Июнь",
+        "Июль",
+        "Август",
+        "Сентябрь",
+        "Октябрь",
+        "Ноябрь",
+        "Декабрь",
+    ]
+    rsInit();
+
+
+
+    function rsInit(){
+        var rs = document.getElementById("rightschedule");
+
+        var title = document.createElement("div");
+        title.innerText = "Самое последнее";
+        title.classList = "solidblock";
+        rs.appendChild(title);
+
+        var bg = document.createElement("div");
+        bg.classList = "newestblock";
+        bg.style.backgroundColor = newestbackcolor;
+        rs.appendChild(bg);
+        
+        var img = document.createElement("img");
+        img.onclick = function() {showImage(getRsPath(dates[dates.length-1]));};
+        img.src = getRsPath(dates[dates.length-1]);
+        bg.appendChild(img);
+        
+        var title = document.createElement("div");
+        title.innerText = "Архив";
+        title.classList = "solidblock";
+        rs.appendChild(title);
+
+        dates.forEach(element => {
+            var path = getRsPath(element);
+
+            var year = document.getElementById(`rsy${element.year}`);
+            if(year == null){
+                var title = document.createElement("div");
+                title.innerText = String(element.year).padStart(4, '0');
+                title.classList = "solidblock";
+                rs.appendChild(title);
+
+                year = document.createElement("div");
+                year.classList = "yearblock";
+                year.id = `rsy${element.year}`;
+                rs.appendChild(year);
+            }
+
+            var month = document.getElementById(`rsm${element.month}`);
+            if(month == null){
+                month = document.createElement("div");
+                month.classList = "monthblock";
+                month.id = `rsm${element.month}`;
+                year.appendChild(month);
+
+                var title = document.createElement("div");
+                title.innerText = monthnames[element.month];
+                title.classList = "solidblock";
+                title.style.alignContent = "center";
+                month.appendChild(title);
+                month.appendChild(document.createElement("div"));
+            }
+
+            var day = document.createElement("button");
+            day.innerText = String(element.day).padStart(2, '0')
+            day.onclick = () => showImage(getRsPath(element));
+            day.style.borderRadius="0";
+            month.childNodes[1].appendChild(day);
+        });
+    }
+    function showImage(path){
+        document.getElementById("menuimg").style.opacity = "100%";
+        document.getElementById("menuimg").style.pointerEvents = "all";
+        document.getElementById("menuimgimg").src = path;
+    }
+    function hideImage(){
+        document.getElementById("menuimg").style.opacity = "0";
+        document.getElementById("menuimg").style.pointerEvents = "none";
+    }
+    function getRsPath(date){
+        return `/images/rightschedule/rs${String(date.day).padStart(2, '0')}${String(date.month).padStart(2, '0')}${String(date.year).padStart(4, '0')}.jpg`
+    }
+</script>

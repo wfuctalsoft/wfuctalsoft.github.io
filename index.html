@@ -20,12 +20,15 @@
 </head>
 <body>
     <header>
-        <div>
+        <div id="headerMain">
             <img src="images/obz_logo.png" style="height: 6vh;">
+            <a href="/">Главная</a>
+            <a href="/rs">Правильное расписание</a>
+            <a href="/shahin">Шахинов рейд</a>
         </div>
         <div>
-            <button onclick="switchTheme()">☼</button>
-            <button><a href="https://t.me/mehatac">
+            <button style="aspect-ratio: 1/1;" onclick="switchTheme()">☼</button>
+            <button style="aspect-ratio: 1/1;"><a href="https://t.me/mehatac">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"/>
                 </svg>
@@ -33,31 +36,13 @@
         </div>
     </header>
 
-    <main>
-        <section>
-            <div class="solidblock">
-                <h1>Правильное расписание</h1>
-            </div>
-            <div class="transparentblock">
-                <img style="width: 20cm;" src="images/rs08102025.jpg">
-                <img style="width: 20cm;" src="images/rs09102025.jpg">
-                <img style="width: 20cm;" src="images/rs10102025.png">
-<img style="width: 20cm;" src="images/rs11102025.jpg">
-<img style="width: 20cm;" src="images/13102025.png">
-<img style="width: 20cm;" src="images/14102025.jpg">
-<img style="width: 20cm;" src="images/rs15102025.jpg">
-<img style="width: 20cm;" src="images/rs16102025.jpg">
-<img style="width: 20cm;" src="images/rs17102025.jpg">
-<img style="width: 20cm;" src="images/rs18102025.jpg">
-<img style="width: 20cm;" src="images/rs20102025.jpg">
-<img style="width: 20cm;" src="images/rs21102025.jpg">
-<img style="width: 20cm;" src="images/rs22102025.jpg">
-<img style="width: 20cm;" src="images/23102025.jpg">
-<img style="width: 20cm;" src="images/rs24102025.jpg">
-            </div>
-        </section>
+    <main id="docmain">
+        <div id="banners">
+        </div>
+        <div id="articles">
 
-        <section>
+        </div>
+        <!-- <section>
             <div class="solidblock">
                 <h1>Шахинов рейд</h1>
             </div>
@@ -65,15 +50,20 @@
                 <h3>В этом блоке можно сыграть в "шахинов рейд" - ПЕРВУЮ В МИРЕ ИГРУ ОТ ИИ (точнее от шахин ии), НОМИНИРОВАННУЮ НА ИГРУ ГОДА</h3>
                 <button id="startButton" onclick="startGame()">СТАРТУЕМ</button>
             </div>
-        </section>
+        </section> -->
     </main>
 </body>
 </html>
 
 <script src="back.js"></script>
+<script src="carousel.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
 <script>
+    const converter = new showdown.Converter();
     var lightTheme = true;
     document.documentElement.classList.toggle('light');
+    switchTheme();
+
     function switchTheme(){
         const body = document.documentElement;
       body.classList.toggle('dark');
@@ -86,4 +76,43 @@
         elm.style = "width:100%; aspect-ratio: 16/9;";
         document.getElementById("gamediv").appendChild(elm);
     }
+
+    var articles = [
+        "obezyanikLaunch",
+        "urkDeprecated",
+        "obezyanikLaunch",
+        "urkDeprecated",
+    ]
+
+    async function loadArticle(name){
+        var prev = document.createElement("img");
+        prev.src = `/articles/${name}/preview.png`;
+        document.getElementById("banners").appendChild(prev);
+
+        var contaier = document.createElement("section");
+        var artprev = document.createElement("img");
+        artprev.src = `/articles/${name}/preview.png`;
+        contaier.appendChild(artprev);
+        var solidblock = document.createElement("div");
+        solidblock.classList = "solidblock";
+        contaier.appendChild(solidblock);
+        
+        var response = await fetch(`/articles/${name}/article.md`);
+        if(!response.ok){
+            solidblock.innerHTML = "Не удалось получить статью";
+        }
+        else{
+            var text = await response.text();
+            solidblock.innerHTML = converter.makeHtml(text);
+        }
+
+
+        document.getElementById("articles").appendChild(contaier);
+    }
+
+    articles.forEach(name => loadArticle(name));
+
+    slideInit();
+    setInterval(()=>slide(),5000);
+
 </script>

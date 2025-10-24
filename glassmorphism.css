@@ -5,6 +5,13 @@
   --light-text: #242424;
 }
 
+html.light *{
+  color: var(--light-text);
+}
+html.dark *{
+  color: var(--dark-text);
+}
+
 header{
   backdrop-filter: blur(20mm);
   border: none;
@@ -16,6 +23,14 @@ header{
   display:flex;
   align-items: center;
   justify-content: space-between;
+}
+#headerMain{
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+}
+#headerMain > *{
+  margin: 0 2vh;
 }
 
 ul{
@@ -66,12 +81,14 @@ html.light button{
   border-radius: 5mm;
   border: 0.5mm solid rgba(255, 255, 255, 0.3); 
   padding: 1vh 1.5vh;
+  cursor: pointer;
 }
 html.dark button{
   background:  var(--dark-bg);
   border-radius: 5mm;
   border: 0.5mm solid rgba(255, 255, 255, 0.3); 
   padding: 1vh 1.5vh;
+  cursor: pointer;
 }
 
 img{
@@ -82,6 +99,14 @@ img{
 body{
     padding: 0;
     margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+#articles{
+  max-width: 99vw;
+ display:flexbox;
+ width: fit-content;
 }
 
 html.light body{
@@ -91,16 +116,34 @@ html.dark body{
     background:  var(--dark-bg);
 }
 
-html.light *{
-  color: var(--light-text);
-}
-html.dark *{
-  color: var(--dark-text);
-}
-
 * {
     font-size:1.05em;
     font-family: "Mulish", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
+}
+
+#banners{
+  max-height: 50vw;
+  width:100vw;
+  height: 40vh;
+  overflow: hidden;
+  position: relative;
+}
+#banners > img{
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  max-height: 50vw;
+  height: 40vh;
+  width: 71vh;
+}
+
+#rightschedule{
+  display: flexbox;
+  flex-direction: column;
+  overflow: scroll;
+}
+#rightschedule > img{
+  width: 30vh;
 }
