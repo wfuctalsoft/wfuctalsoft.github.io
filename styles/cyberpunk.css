@@ -1,0 +1,242 @@
+
+@import url('https://fonts.googleapis.com/css2?family=WDXL+Lubrifont+SC&display=swap');
+
+:root {
+    --border-color: #df2a24;
+  --dark-bg: black;
+  --light-bg: white; 
+  --dark-text: #df2a24; 
+  --light-text: #df2a24;
+}
+
+html.light *{
+  color: var(--light-text);
+}
+html.dark *{
+  color: var(--dark-text);
+}
+
+header{
+  backdrop-filter: blur(20mm);
+  border: 2px solid var(--border-color);
+  border-width: 1px;
+  margin: 1vh;
+  background: color-mix(in srgb, var(--border-color), transparent 70%);
+  top:0;
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  height: 5vh;
+  gap:4vh;
+  padding: 1vh;
+}
+#headerMain{
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  height: inherit;
+}
+#headerMain > *{
+  margin: 0 2vh;
+}
+
+ul{
+  flex-direction: column;
+    display:flex;
+}
+li {
+    margin: 1vh 1vw;
+}
+a{
+  text-decoration: none;
+}
+.navmenu{
+  overflow-x: scroll;
+  overflow-y: hidden;
+  margin-right: 0;
+  display: flex;
+  gap:1vh;
+  align-items: center; 
+  justify-content: space-between;
+}
+.navmenu::-webkit-scrollbar{
+  display: none;
+}
+
+.navmenu > *{
+  white-space: nowrap
+}
+
+section {
+  backdrop-filter: blur(2mm);
+  border: 2px solid var(--border-color);
+  margin: 1vh 1vh;
+  /* padding: 1vh 1vw; */
+  padding: 0;
+  background: color-mix(in srgb, var(--border-color), transparent 70%);
+  display: flexbox;
+  overflow: hidden;
+}
+
+html.light div.solidblock{
+    margin: 0;
+    padding: 1vh 1vh;
+    display:flexbox;
+    background:  var(--light-bg);
+}
+html.dark div.solidblock{
+    margin: 0;
+    padding: 1vh 1vh;
+    display:flexbox;
+    background:  var(--dark-bg);
+}
+div.transparentblock{
+    margin: 0;
+    padding: 1vh 1vh;
+    display:flexbox;
+    background-color: transparent;
+}
+
+html.light button{
+  background:  var(--border-color);
+  border: none;
+  padding: 1vh 1.5vh;
+  cursor: pointer;
+}
+html.dark button{
+  background:  var(--border-color);
+  border: none;
+  padding: 1vh 1.5vh;
+  cursor: pointer;
+}
+
+button > *{
+    filter: saturate(0.1);
+    margin: 0;
+}
+
+img{
+  max-width: 100%;
+    filter: url(#red-filter) saturate(1.5);
+}
+
+html, body{
+    padding: 0;
+    margin: 0;
+}
+
+#articles{
+  display:flex;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#articles > *{
+  max-width: min(1400px,96%);
+  font-size: 4mm;
+}
+#mainPreviewSection{
+  display: flex;
+  padding: 0;
+}
+@media (max-width: 767px){
+  #mainPreviewSection{
+    flex-direction: column;
+  }
+}
+#previewSection > img{
+  object-fit: contain;
+  max-width: min(700px,96%);
+  padding: 0;
+}
+#previewSection > h1{
+  font-size:2em;
+  padding: 0;
+  margin: 1vh 2vh;
+}
+#articleSection{
+  padding: 0;
+}
+#articleSection > *{
+  font-size:1.5em;
+}
+
+#mainPreviewSection{
+  display: flex;
+  padding: 0;
+}
+#mainPreviewSection > img{
+  object-fit: contain;
+  max-width: min(700px,96%);
+  padding: 0;
+}
+#mainPreviewSection > div{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+}
+#mainPreviewSection > div > h1{
+  font-size:2em;
+  padding: 0;
+  margin: 1vh 2vh;
+}
+#mainPreviewSection > div > button{
+  font-size:1.5em;
+  margin: 1vh 1vh;
+}
+#articleSection{
+  padding: 1vh 1vh;
+}
+#articleSection > *{
+  font-size:1.5em;
+}
+
+html.light body{
+    background:  var(--light-bg);
+}
+html.dark body{
+    background:  var(--dark-bg);
+}
+
+* {
+    font-size:1.11em;
+  font-family: "WDXL Lubrifont SC", sans-serif;
+    font-style: normal;
+}
+
+section{
+    border-top: 2vh solid var(--border-color);
+  box-shadow: 0 0 4px var(--border-color);
+}
+*:where(p,h1,h2,h3,h4){
+  text-shadow: 0 0 3px var(--border-color);
+}
+
+#banners{
+  max-height: 50vw;
+  width:100vw;
+  height: 40vh;
+  overflow: hidden;
+  position: relative;
+}
+#banners > img{
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  max-height: 50vw;
+  height: 40vh;
+  width: 71vh;
+  z-index: 1;
+}
+
+#rightschedule{
+  display: flexbox;
+  flex-direction: column;
+  overflow: scroll;
+}
+#rightschedule > img{
+  width: 30vh;
+}

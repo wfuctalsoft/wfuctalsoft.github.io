@@ -7,19 +7,27 @@ var height = Math.max( body.scrollHeight, body.offsetHeight,
 const fireflySize = 200;
 const fireflySpeed = 0.05;
 const fireflyTK = 0.03;
-const fireflyCount = 10;
+const fireflyDensity = 200*200;
+let fireflyCount = height*html.clientWidth/fireflyDensity;
+
+function removeFireflies(){
+	document.querySelectorAll('.firefly').forEach(element => {
+		element.remove();
+	});
+}
 
 // Функция для создания светлячка
 function createFirefly() {
 	const firefly = document.createElement('div');
-
+	
 	// Устанавливаем случайную начальную позицию
 	firefly.style.left = `${Math.random() * html.clientWidth}px`;
-	firefly.style.top = `${Math.random() * height}px`;
+	firefly.style.top = `${Math.random() * Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight )}px`;
     firefly.style.width = "2px";
     firefly.style.height = "2px";
     firefly.style.position = "absolute";
-    firefly.style.zIndex = -1;
+    firefly.style.zIndex = -2;
+	firefly.classList = "firefly"
 
 	let color = get_random_color();
 	firefly.style.backgroundColor = color;
@@ -61,8 +69,13 @@ function animateFirefly(firefly) {
 }
 
 // Создаем несколько светлячков
-for (let i = 0; i < fireflyCount; i++) {
-	createFirefly();
+function initFireflies(){
+	removeFireflies();
+	setTimeout(()=>{
+		for (let i = 0; i < fireflyCount; i++) {
+		createFirefly();
+	}
+	},100);
 }
 
 let texts = document.getElementsByTagName("h2");

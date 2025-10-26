@@ -4,9 +4,9 @@ function slideInit(){
     for(let i = 0; i < elements.length; i++){
         let pos = (idx+i)%elements.length;
         if(pos > 5)
-            elements[i].style.transform = `translateX(-250%)`;
+            elements[i].style.transform = `translateX(-250%) scale(${pos == 2? "96%" : "80%"}`;
         else
-            elements[i].style.transform = `translateX(${pos*100-250}%)`;
+            elements[i].style.transform = `translateX(${pos*100-250}%) scale(${pos == 2? "96%" : "80%"}`;
 
         if(pos == 2) elements[i].style.opacity = `100%`;
         else if(pos == 1 || pos == 3) elements[i].style.opacity = `50%`;
@@ -18,10 +18,8 @@ function slideInit(){
 function slide(){
     for(let i = 0; i < elements.length; i++){
         let pos = (idx+i)%elements.length;
-        if(pos > 5)
-            elements[i].style.transform = `translateX(-250%)`;
-        else
-            elements[i].style.transform = `translateX(${pos*100-250}%)`;
+        if(pos > 5) elements[i].style.transform = `translateX(-250%) scale(${pos == 2? "96%" : "80%"})`;
+        else elements[i].style.transform = `translateX(${pos*100-250}%) scale(${pos == 2? "96%" : "80%"})`;
 
         if(pos == 2) elements[i].style.opacity = `100%`;
         else if(pos == 1 || pos == 3) elements[i].style.opacity = `50%`;

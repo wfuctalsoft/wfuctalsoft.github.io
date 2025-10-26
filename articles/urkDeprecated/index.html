@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Обезьянник ру - сайт южного и северного обезъянника</title>
-    <meta name="description" content="Обезьянник ру - сайт про северный и южный обезьянник. спонсором является просветленный осел, иконой - басков олег юрьевич">
+    <meta name="description" content="**Челябинск, октябрь 2025 года** — В городе навсегда закрывает свои двери одна из известных, но давно испытывавших трудности «шараг» — колледж УРК.">
     <meta name="keywords" content="обезьянник, южный обезьянник, северный обезьянник, шахин, осел">
-    <meta property="og:title" content="Обезьянник - правильное расписание и шахинов рейд"/>
+    <meta property="og:title" content="Колледж УРК был распущен, почему? Какова его судьба?"/>
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="http://obezyanik.ru" />
-    <meta property="og:image" content="http://obezyanik.ru/images/wpp.png"/>
+    <meta property="og:url" content="http://obezyanik.ru/articles/obezyanikLaunch" />
+    <meta property="og:image" content="http://obezyanik.ru/articles/urkDeprecated/preview.png"/>
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -20,7 +20,7 @@
 <body>
     <header>
         <div id="headerMain">
-            <img src="images/obz_logo.png" style="height: inherit; object-fit: contain;">
+            <img src="/images/obz_logo.png" style="height: inherit; object-fit: contain;">
         </div>
         <div class="navmenu">
             <a href="/">Главная</a>
@@ -37,8 +37,6 @@
     </header>
 
     <main id="docmain" >
-        <div id="banners">
-        </div>
         <div id="articles">
 
         </div>
@@ -46,7 +44,6 @@
 </body>
 </html>
 
-<script src="/carousel.js"></script>
 <script src="/back.js"></script>
 <script src="/styler.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
@@ -55,36 +52,19 @@
 
     const converter = new showdown.Converter();
 
-    var articles = [
-        "obezyanikLaunch",
-        "urkDeprecated",
-        "cyberUpdate",
-        "obezyanikLaunch",
-        "urkDeprecated",
-        "cyberUpdate",
-    ]
-
-    async function loadArticle(name){
-        var prev = document.createElement("img");
-        prev.src = `/articles/${name}/preview.png`;
-        prev.addEventListener('click', function() {
-            document.location = `/articles/${name}`;
-        });
-        document.getElementById("banners").appendChild(prev);
-
+    async function loadArticle(){
         var contaier = document.createElement("section");
+
         var prevSect = document.createElement("div");
         prevSect.classList = "solidblock"
-        prevSect.id = "mainPreviewSection";
+        prevSect.id = "previewSection";
 
         var artprev = document.createElement("img");
-        artprev.src = `/articles/${name}/preview.png`;
+        artprev.src = `preview.png`;
         prevSect.appendChild(artprev);
 
-        var snd = document.createElement("div");
-        
         var header = document.createElement("h1");
-        var hresponse = await fetch(`/articles/${name}/header.txt`);
+        var hresponse = await fetch(`header.txt`);
         if(!hresponse.ok){
             header.innerText = "Не удалось получить заголовок";
         }
@@ -92,23 +72,28 @@
             var text = await hresponse.text();
             header.innerText = text;
         }
-        snd.appendChild(header);
-
-        var goto = document.createElement("button");
-        goto.innerHTML = `<h4>Читать</h4>`;
-        goto.addEventListener('click', function() {
-            document.location = `/articles/${name}`;
-        });
-        snd.appendChild(goto);
-        prevSect.appendChild(snd);
-
+        prevSect.appendChild(header);
         contaier.appendChild(prevSect);
+
+        var solidblock = document.createElement("div");
+        solidblock.classList = "transparentblock";
+        solidblock.id = "articleSection"
+        contaier.appendChild(solidblock);
+        
+        var response = await fetch(`article.md`);
+        if(!response.ok){
+            solidblock.innerHTML = "Не удалось получить статью";
+        }
+        else{
+            var text = await response.text();
+            solidblock.innerHTML = converter.makeHtml(text);
+        }
 
 
         document.getElementById("articles").appendChild(contaier);
     }
 
-    articles.forEach(name => loadArticle(name));
+    loadArticle()
 
     slideInit();
     setInterval(()=>slide(),5000);
