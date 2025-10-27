@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>focus system</title>
+    <style>
+        canvas { border: 2px solid #333; margin: 10px; }
+        button { margin: 5px; padding: 8px 12px; }
+        .controls { margin: 10px; }
+    </style>
+</head>
+<body>
+    <div id="canvasContainer"  contenteditable="true" virtualkeyboardpolicy="manual">
+        <canvas id="canvas" width="1920" height="1080"></canvas>
+    </div>
+    <script>
+        const cvc = document.getElementById('canvasContainer');
+        cvc.addEventListener('click', () => {
+            if ('virtualKeyboard' in navigator) {
+                navigator.virtualKeyboard.show();
+            }
+        });
+
+        const canvas = document.getElementById('canvas');
+
+        const ratio = 16/9.0;
+
+        const width = Math.min(window.innerWidth,window.innerHeight*ratio);
+        const height = width / ratio;
+
+        canvas.width = width;
+        canvas.height = height;
+
+    </script>
+    <script src="kernel.js"></script>
+</body>
+</html>
+
+<style>
+#canvasContainer{
+    display: flex;
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height:100%;
+    align-items: center;
+    justify-content: center;
+    background: black;
+}
+#canvas{
+    border: none;
+    max-width: 100vw;
+    max-height: 100vh;
+    object-fit: contain;
+    width: 100%;
+}
+</style>
