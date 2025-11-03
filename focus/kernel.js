@@ -2328,12 +2328,15 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
 var ASM_CONSTS = {
-  72272: ($0, $1) => { var canvas = document.getElementById('canvas'); if (canvas) { setValue($0, canvas.width, 'i32'); setValue($1, canvas.height, 'i32'); } },  
- 72411: ($0, $1, $2, $3) => { setInterval(()=>{ var canvas = document.getElementById('canvas'); var ctx = canvas.getContext('2d'); var imageData = ctx.createImageData($1, $2); var heap = new Uint8Array(Module.HEAPU8.buffer, $0, $1 * $2 * 4); imageData.data.set(heap); ctx.putImageData(imageData, 0, 0); },$3); },  
- 72695: ($0, $1, $2) => { var canvas = document.getElementById('canvas'); var ctx = canvas.getContext('2d'); var imageData = ctx.createImageData($1, $2); var heap = new Uint8Array(Module.HEAPU8.buffer, $0, $1 * $2 * 4); imageData.data.set(heap); ctx.putImageData(imageData, 0, 0); },  
- 72954: () => { if (typeof window.startInput === 'function') { window.startInput(); } },  
- 73028: () => { if (typeof window.handleBackspace === 'function') { window.handleBackspace(); } },  
- 73112: () => { if (typeof window.endInput === 'function') { window.endInput(); } }
+  72552: ($0, $1) => { var canvas = document.getElementById('canvas'); if (canvas) { setValue($0, canvas.width, 'i32'); setValue($1, canvas.height, 'i32'); } },  
+ 72691: ($0, $1, $2, $3) => { setInterval(()=>{ var canvas = document.getElementById('canvas'); var ctx = canvas.getContext('2d'); var imageData = ctx.createImageData($1, $2); var heap = new Uint8Array(Module.HEAPU8.buffer, $0, $1 * $2 * 4); imageData.data.set(heap); ctx.putImageData(imageData, 0, 0); },$3); },  
+ 72975: ($0, $1, $2) => { var canvas = document.getElementById('canvas'); var ctx = canvas.getContext('2d'); var imageData = ctx.createImageData($1, $2); var heap = new Uint8Array(Module.HEAPU8.buffer, $0, $1 * $2 * 4); imageData.data.set(heap); ctx.putImageData(imageData, 0, 0); },  
+ 73234: () => { if (typeof window.startInput === 'function') { window.startInput(); } },  
+ 73308: () => { if (typeof window.handleBackspace === 'function') { window.handleBackspace(); } },  
+ 73392: () => { if (typeof window.endInput === 'function') { window.endInput(); } },  
+ 73462: ($0) => { console.log(UTF8ToString($0)); },  
+ 73497: ($0) => { console.log(UTF8ToString($0)); },  
+ 73532: ($0) => { console.log(UTF8ToString($0)); }
 };
 
 // Imports from the Wasm binary.
