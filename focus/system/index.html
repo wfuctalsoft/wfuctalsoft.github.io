@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>focus system</title>
+    <style>
+        canvas { 
+            border: 2px solid #333; 
+            margin: 10px; 
+            z-index: 0;
+            width: 100%;
+            height:100%;
+        }
+        button { 
+            margin: 5px; 
+            padding: 8px 12px; 
+        }
+        .controls { 
+            margin: 10px; 
+        }
+        .keyboard {
+            position: fixed;
+            bottom: 0;
+            z-index: 1;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 15px;
+            backdrop-filter: blur(2mm);
+            border: 0.5mm solid rgba(255, 255, 255, 0.3);
+            border-radius: 5mm;
+            background: linear-gradient(#f7f7f730,#a9bcce30);
+            display: none;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .key {
+            min-width: 50px;
+            height: 50px;
+            margin: 3px;
+            border: none;
+            border-radius: 5px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.1s ease;
+        }
+
+        #showkbd{
+            position: fixed;
+            top:0;
+            right: 0;
+            min-width: 50px;
+            height: 50px;
+            margin: 3px;
+            border: none;
+            border-radius: 5px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.1s ease;
+        }
+
+        .key:hover {
+            background: #e0e0e0;
+        }
+
+        .key:active {
+            transform: scale(0.95);
+        }
+
+        .key-wide {
+            min-width: 100px;
+        }
+
+        .key-extra-wide {
+            min-width: 200px;
+        }
+
+        .key-space {
+            min-width: 300px;
+        }
+
+        .key-special {
+            background: #a0a0a0;
+            color: white;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .caps-active {
+            background: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvasContainer" style="z-index: 0;"  contenteditable="true" virtualkeyboardpolicy="manual">
+        <canvas id="canvas"></canvas>
+        <div class="keyboard" id="keyboard"></div>
+        <button id="showkbd" onclick="changeVisibility()">KBD</button>
+    </div>
+    <script>
+        const cvc = document.getElementById('canvasContainer');
+        cvc.addEventListener('click', () => {
+            if ('virtualKeyboard' in navigator) {
+                navigator.virtualKeyboard.show();
+            }
+        });
+
+        const canvas = document.getElementById('canvas');
+
+        //const ratio = 16/9.0;
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const keyboardLayout = [
+            ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'Backspace'],
+            ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+            ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', 'Enter'],
+            ['Ctrl', 'Alt', 'Space', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'ArrowRight']
+        ];
+
+        const keyboardLayoutShift = [
+            ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', 'Backspace'],
+            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+            ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+            ['Shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', 'Enter'],
+            ['Ctrl', 'Alt', 'Space', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'ArrowRight']
+        ];
+
+        let isCapsLock = false;
+        let isShift = false;
+        let isCtrl = false;
+        let isAlt = false;
+        
+        let pressedKeys = new Set();
+        let repeatIntervals = new Map();
+        
+        const keyboard = document.getElementById('keyboard');
+        const status = document.getElementById('status');
+        const logContent = document.getElementById('logContent');
+
+        const keyCodes = {
+            'Backspace': 'Backspace',
+            'Enter': 'Enter',
+            'Shift': 'ShiftLeft',
+            'Ctrl': 'ControlLeft',
+            'Alt': 'AltLeft',
+            'Space': 'Space',
+            'ArrowLeft': 'ArrowLeft',
+            'ArrowRight': 'ArrowRight',
+            'ArrowUp': 'ArrowUp',
+            'ArrowDown': 'ArrowDown',
+            'a': 'KeyA', 'b': 'KeyB', 'c': 'KeyC', 'd': 'KeyD', 'e': 'KeyE',
+            'f': 'KeyF', 'g': 'KeyG', 'h': 'KeyH', 'i': 'KeyI', 'j': 'KeyJ',
+            'k': 'KeyK', 'l': 'KeyL', 'm': 'KeyM', 'n': 'KeyN', 'o': 'KeyO',
+            'p': 'KeyP', 'q': 'KeyQ', 'r': 'KeyR', 's': 'KeyS', 't': 'KeyT',
+            'u': 'KeyU', 'v': 'KeyV', 'w': 'KeyW', 'x': 'KeyX', 'y': 'KeyY',
+            'z': 'KeyZ',
+            '1': 'Digit1', '2': 'Digit2', '3': 'Digit3', '4': 'Digit4', '5': 'Digit5',
+            '6': 'Digit6', '7': 'Digit7', '8': 'Digit8', '9': 'Digit9', '0': 'Digit0',
+            '!': 'Digit1', '@': 'Digit2', '#': 'Digit3', '$': 'Digit4', '%': 'Digit5',
+            '^': 'Digit6', '&': 'Digit7', '*': 'Digit8', '(': 'Digit9', ')': 'Digit0',
+            ',': 'Comma', '.': 'Period', '<': 'Comma', '>': 'Period'
+        };
+
+        let kbdvis = false;
+        function changeVisibility(){
+            console.log(kbdvis);
+            if(kbdvis){
+                keyboard.style.display = "none";
+            }
+            else{
+                keyboard.style.display = "block";
+            }
+            kbdvis = !kbdvis;
+        }
+
+        function createKeyboard() {
+            keyboard.innerHTML = '';
+            const layout = isShift ? keyboardLayoutShift : keyboardLayout;
+
+            layout.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'keyboard-row';
+
+                row.forEach(key => {
+                    const button = document.createElement('button');
+                    button.className = 'key';
+                    button.textContent = key;
+                    button.dataset.key = key;
+
+                    if (key === 'Backspace' || key === 'Enter') {
+                        button.classList.add('key-wide', 'key-special');
+                    } else if (key === 'Shift' || key === 'Ctrl' || key === 'Alt') {
+                        button.classList.add('key-wide', 'key-modifier');
+                    } else if (key === 'Space') {
+                        button.classList.add('key-space', 'key-special');
+                    } else if (key.startsWith('Arrow')) {
+                        button.classList.add('key-special');
+                    }
+
+                    if (key === 'Shift' && isShift) {
+                        button.classList.add('active');
+                    }
+                    if (key === 'Ctrl' && isCtrl) {
+                        button.classList.add('active');
+                    }
+                    if (key === 'Alt' && isAlt) {
+                        button.classList.add('active');
+                    }
+
+                    button.addEventListener('mousedown', (e) => {
+                        e.preventDefault();
+                        handleKeyPress(key, true);
+                    });
+                    
+                    button.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        handleKeyPress(key, true);
+                    }, { passive: false });
+                    
+                    button.addEventListener('mouseup', () => handleKeyRelease(key));
+                    button.addEventListener('mouseleave', () => {
+                        if (pressedKeys.has(key)) {
+                            handleKeyRelease(key);
+                        }
+                    });
+                    button.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        handleKeyRelease(key);
+                    }, { passive: false });
+
+                    rowDiv.appendChild(button);
+                });
+
+                keyboard.appendChild(rowDiv);
+            });
+        }
+
+        function handleKeyPress(key, isInitial = false) {
+            if (pressedKeys.has(key) && !isInitial) {
+                return; 
+            }
+            
+            pressedKeys.add(key);
+            updateStatus();
+            
+            const eventKey = getEventKey(key);
+            const code = keyCodes[eventKey] || `Key${eventKey.toUpperCase()}`;
+            
+            const button = document.querySelector(`[data-key="${key}"]`);
+            if (button) {
+                button.classList.add('active');
+            }
+            
+            createKeyboardEvent('keydown', eventKey, code);
+            
+            if (!['Shift', 'Ctrl', 'Alt'].includes(key) && isInitial) {
+                let timeout = setTimeout(() => {
+                    const interval = setInterval(() => {
+                        if (pressedKeys.has(key)) {
+                            createKeyboardEvent('keydown', eventKey, code);
+                        } else {
+                            clearInterval(interval);
+                            repeatIntervals.delete(key);
+                        }
+                    }, 50);
+                    repeatIntervals.set(key, interval);
+                }, 500);
+                
+                repeatIntervals.set(key + '_timeout', timeout);
+            }
+
+            switch(key) {
+                case 'Shift':
+                    isShift = true;
+                    createKeyboard();
+                    break;
+                case 'Ctrl':
+                    isCtrl = true;
+                    break;
+                case 'Alt':
+                    isAlt = true;
+                    break;
+            }
+
+            logEvent(`keydown: ${key} (${code})`);
+        }
+
+        function handleKeyRelease(key) {
+            if (!pressedKeys.has(key)) {
+                return;
+            }
+            
+            pressedKeys.delete(key);
+            updateStatus();
+            
+            const eventKey = getEventKey(key);
+            const code = keyCodes[eventKey] || `Key${eventKey.toUpperCase()}`;
+            
+            const button = document.querySelector(`[data-key="${key}"]`);
+            if (button) {
+                button.classList.remove('active');
+            }
+            
+            if (repeatIntervals.has(key)) {
+                clearInterval(repeatIntervals.get(key));
+                repeatIntervals.delete(key);
+            }
+            if (repeatIntervals.has(key + '_timeout')) {
+                clearTimeout(repeatIntervals.get(key + '_timeout'));
+                repeatIntervals.delete(key + '_timeout');
+            }
+            
+            createKeyboardEvent('keyup', eventKey, code);
+
+            switch(key) {
+                case 'Shift':
+                    isShift = false;
+                    createKeyboard();
+                    break;
+                case 'Ctrl':
+                    isCtrl = false;
+                    break;
+                case 'Alt':
+                    isAlt = false;
+                    break;
+            }
+
+            logEvent(`keyup: ${key} (${code})`);
+        }
+
+        function getEventKey(key) {
+            switch(key) {
+                case 'Space': return ' ';
+                case 'Enter': return 'Enter';
+                case 'Backspace': return 'Backspace';
+                case 'Shift': return 'Shift';
+                case 'Ctrl': return 'Control';
+                case 'Alt': return 'Alt';
+                case 'ArrowLeft': return 'ArrowLeft';
+                case 'ArrowRight': return 'ArrowRight';
+                case 'ArrowUp': return 'ArrowUp';
+                case 'ArrowDown': return 'ArrowDown';
+                default: return key;
+            }
+        }
+
+        function createKeyboardEvent(type, key, code) {
+            const event = new KeyboardEvent(type, {
+                key: key,
+                code: code,
+                keyCode: getKeyCode(key),
+                which: getKeyCode(key),
+                bubbles: true,
+                cancelable: true,
+                composed: true,
+                ctrlKey: isCtrl,
+                shiftKey: isShift,
+                altKey: isAlt,
+                metaKey: false,
+                view: window,
+                char: type === 'keypress' && key.length === 1 ? key : undefined
+            });
+
+            document.dispatchEvent(event);
+        }
+
+        function getKeyCode(key) {
+            if (key.length === 1) {
+                return key.toUpperCase().charCodeAt(0);
+            }
+            
+            const specialKeys = {
+                'Backspace': 8,
+                'Enter': 13,
+                'Shift': 16,
+                'Control': 17,
+                'Alt': 18,
+                ' ': 32,
+                'ArrowLeft': 37,
+                'ArrowUp': 38,
+                'ArrowRight': 39,
+                'ArrowDown': 40
+            };
+            
+            return specialKeys[key] || 0;
+        }
+
+        function updateStatus() {
+            const modifiers = [];
+            if (isShift) modifiers.push('Shift');
+            if (isCtrl) modifiers.push('Ctrl');
+            if (isAlt) modifiers.push('Alt');
+        }
+
+        function logEvent(message) {
+            const now = new Date();
+            const time = now.toTimeString().split(' ')[0] + '.' + now.getMilliseconds().toString().padStart(3, '0');
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `[${time}] ${message}`;
+        }
+
+        createKeyboard();
+
+        window.addEventListener('beforeunload', () => {
+            repeatIntervals.forEach((interval, key) => {
+                if (typeof interval === 'number') {
+                    clearInterval(interval);
+                }
+            });
+        });
+
+        function emscripten_set_keydown_callback(target, userData, useCapture, callback) {
+            document.addEventListener('keydown', callback, useCapture);
+        }
+
+        function emscripten_set_keyup_callback(target, userData, useCapture, callback) {
+            document.addEventListener('keyup', callback, useCapture);
+        }
+    </script>
+    <script src="kernel.js"></script>
+</body>
+</html>
+
+<style>
+#canvasContainer{
+    display: flex;
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height:100%;
+    align-items: center;
+    justify-content: center;
+    background: black;
+}
+#canvas{
+    border: none;
+    max-width: 100vw;
+    max-height: 100vh;
+    object-fit: contain;
+    width: 100%;
+}
+</style>

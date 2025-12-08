@@ -8,7 +8,7 @@ const fireflySize = 200;
 const fireflySpeed = 0.05;
 const fireflyTK = 0.03;
 const fireflyDensity = 200*200;
-let fireflyCount = height*html.clientWidth/fireflyDensity;
+let fireflyCount = height*html.clientWidth/fireflyDensity/2;
 
 function removeFireflies(){
 	document.querySelectorAll('.firefly').forEach(element => {
